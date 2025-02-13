@@ -112,4 +112,4 @@ def criar_grafico_por_conta():
 #print(x)
 
 # Criando Gráfico
-criar_grafico_por_conta()
+# criar_grafico_por_conta()
