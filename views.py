@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from models import Conta, Historico, Tipos, engine, Bancos, Status
 from sqlmodel import select, Session
 
@@ -70,6 +70,26 @@ def total_contas():
             total += conta.valor
         return float(total)
 
+def buscar_historico_entre_datas(data_inicio: date, data_fim: date):
+    with Session(engine) as session:
+        statement = select(Historico).where(Historico.data >= data_inicio, Historico.data <= data_fim)
+        results =  session.exec(statement).all()
+        return results
+
+def criar_grafico_por_conta():
+    with Session(engine) as session:
+        statement = select(Conta).where(Conta.status==Status.ATIVO)
+        contas = session.exec(statement).all()
+
+        bancos = [conta.banco.value for conta in contas]
+        total = [conta.valor for conta in contas]
+
+        import matplotlib.pyplot as plt
+
+        plt.bar(bancos, total)
+        plt.show()
+
+        
 # Criando contas
 #conta = Conta(valor=100, banco=Bancos.SANTANDER)
 #criar_conta(conta)
@@ -86,3 +106,10 @@ def total_contas():
             
 # Verificando todas as contas
 # print(total_contas())
+    
+# Buscar historico
+#x = buscar_historico_entre_datas(date.today() - timedelta(days = 1), date.today() + timedelta(days=1))
+#print(x)
+
+# Criando Gráfico
+criar_grafico_por_conta()
