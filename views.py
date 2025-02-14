@@ -21,7 +21,7 @@ def listar_contas():
         results = session.exec(statement).all()
     return results
     
-def desativar_contas(id):
+def desativar_conta(id):
     with Session(engine) as session:
         statement = select(Conta).where(Conta.id == id)
         conta = session.exec(statement).first()
